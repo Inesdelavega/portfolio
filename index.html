@@ -1,0 +1,1941 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inés de la Vega — Product Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet">
+  <style>
+    /* ════════════════════════════════════════════════════════════
+       TOKENS
+    ════════════════════════════════════════════════════════════ */
+    :root {
+      --bg:        #0c0c0b;
+      --surface:   #161615;
+      --surface-2: #1e1e1c;
+      --border:    #2b2b28;
+      --text:      #edecea;
+      --text-soft: #8a8880;
+      --text-muted:#4a4946;
+      --accent:    #6366f1;
+      --accent-ink:#ffffff;
+      --font-sans:  "Geist", "Helvetica Neue", sans-serif;
+      --font-serif: "Newsreader", "Georgia", serif;
+      --font-mono:  "Geist Mono", ui-monospace, monospace;
+      --ease:       cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    [data-theme="swiss"] {
+      --bg:        #f8f7f4;
+      --surface:   #ffffff;
+      --surface-2: #f2f1ee;
+      --border:    #e3e2de;
+      --text:      #0f0f0e;
+      --text-soft: #5c5a57;
+      --text-muted:#aaa8a4;
+    }
+    [data-theme="warm"] {
+      --bg:        #f1ece2;
+      --surface:   #f7f2e8;
+      --surface-2: #ece7dd;
+      --border:    #d8d2c4;
+      --text:      #1a1714;
+      --text-soft: #514942;
+      --text-muted:#9a9082;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       RESET
+    ════════════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 15px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    video, img { display: block; }
+
+    .r {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.75s var(--ease), transform 0.75s var(--ease);
+    }
+    .r.in { opacity: 1; transform: none; }
+    .r1 { transition-delay: 0.08s; }
+    .r2 { transition-delay: 0.16s; }
+    .r3 { transition-delay: 0.24s; }
+
+    /* ════════════════════════════════════════════════════════════
+       NAV
+    ════════════════════════════════════════════════════════════ */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 48px;
+      background: rgba(12,12,11,0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    [data-theme="swiss"] .nav { background: rgba(248,247,244,0.85); }
+    [data-theme="warm"]  .nav { background: rgba(241,236,226,0.85); }
+
+    .nav__name {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+    .nav__right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    /* Language toggle */
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .lang-btn {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      padding: 0;
+      transition: color 0.15s;
+    }
+    .lang-btn:hover { color: var(--text-soft); }
+    .lang-btn.active { color: var(--text); }
+    .lang-sep {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .nav__cta {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent-ink);
+      background: var(--accent);
+      padding: 8px 18px;
+      border-radius: 6px;
+      letter-spacing: -0.01em;
+      transition: opacity 0.15s;
+    }
+    .nav__cta:hover { opacity: 0.85; }
+
+    /* ════════════════════════════════════════════════════════════
+       HERO
+    ════════════════════════════════════════════════════════════ */
+    .hero {
+      min-height: 100svh;
+      padding: 0 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding-top: 100px;
+      padding-bottom: 52px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 5%;
+      left: -10%;
+      width: 60%;
+      height: 60%;
+      background: var(--accent);
+      filter: blur(200px);
+      opacity: 0.07;
+      pointer-events: none;
+    }
+    .hero__top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .hero__top-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .hero__main { position: relative; z-index: 1; }
+
+    /* v2 hero — big editorial number */
+    .hero__intro {
+      font-family: var(--font-mono);
+      font-size: clamp(12px, 1.3vw, 17px);
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .hero__num {
+      display: block;
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(96px, 14vw, 180px);
+      line-height: 0.88;
+      letter-spacing: -0.04em;
+      color: var(--text);
+    }
+    .hero__num-m { color: var(--accent); font-style: normal; }
+    .hero__claim {
+      font-size: clamp(18px, 2.6vw, 34px);
+      font-weight: 500;
+      letter-spacing: -0.025em;
+      line-height: 1.25;
+      color: var(--text-soft);
+      margin-top: 16px;
+      max-width: 26ch;
+    }
+    .hero__bio {
+      font-size: clamp(15px, 1.35vw, 18px);
+      line-height: 1.8;
+      color: var(--text-soft);
+      margin-top: 22px;
+      max-width: 54ch;
+    }
+    .hero__bio strong { color: var(--text); font-weight: 500; }
+    .hero__bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .hero__disciplines {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .hero__scroll-hint {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero__scroll-hint::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 32px;
+      background: var(--text-muted);
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       FEATURED CASE
+    ════════════════════════════════════════════════════════════ */
+    .featured {
+      position: relative;
+      height: 100svh;
+      overflow: hidden;
+    }
+    .featured__media {
+      position: absolute;
+      inset: 0;
+    }
+    .featured__media video,
+    .featured__media img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .featured__gradient {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0.1) 100%);
+    }
+    .featured__body {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 36px 48px 48px;
+      z-index: 2;
+    }
+    .featured__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .featured__index {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+    .featured__tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 5px 14px;
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
+    }
+    .featured__footer {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .featured__title {
+      font-size: clamp(52px, 8vw, 100px);
+      font-weight: 700;
+      line-height: 0.9;
+      letter-spacing: -0.035em;
+      color: #fff;
+    }
+    .featured__title em {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 300;
+    }
+    .featured__proj-type {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-top: 14px;
+    }
+    .featured__desc {
+      font-size: 14px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.58);
+      max-width: 52ch;
+      margin-top: 14px;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       PROJECTS GRID
+    ════════════════════════════════════════════════════════════ */
+    .pg-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 56px 48px 40px;
+      border-bottom: 1px solid var(--border);
+    }
+    .pg-header h2 {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+    .pg-header h2 em {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--text-soft);
+    }
+    .pg-header span {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .pg-grid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      border-top: 1px solid var(--border);
+    }
+    .pg-card {
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .pg-card--a { grid-column: 1 / 7;  }
+    .pg-card--b { grid-column: 7 / 11; border-right: none; }
+    .pg-card--c { grid-column: 1 / 11; border-right: none; }
+    .pg-card--d { grid-column: 1 / 5;  }
+    .pg-card--e { grid-column: 5 / 11; border-right: none; }
+    .pg-card--mc .pg-card__media { background: #e8e8e6; overflow: visible; }
+    [data-theme="dark"] .pg-card--mc .pg-card__media { background: #1c1c1e; }
+    [data-theme="warm"] .pg-card--mc .pg-card__media { background: #e2dbd0; }
+    .pg-card--mc .pg-card__media .mockup-wrap video { height: auto; object-fit: unset; }
+    .pg-card--mc:hover .pg-card__media video { transform: none !important; }
+
+    /* ── Laptop mockup ──────────────────────────────────────────── */
+    .mockup-wrap {
+      width: 100%; height: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 36px 12% 0;
+    }
+    .laptop {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .laptop__lid {
+      width: 100%;
+      background: #3a3a3c;
+      border-radius: 10px 10px 0 0;
+      padding: 8px 7px 6px;
+      border: 1.5px solid #505052;
+      border-bottom: none;
+    }
+    .laptop__lid::before {
+      content: '';
+      display: block;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #555;
+      margin: 0 auto 5px;
+    }
+    .laptop__screen {
+      background: #000;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .laptop__screen video,
+    .laptop__screen img {
+      width: 100%;
+      display: block;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+    }
+    .laptop__base {
+      width: 108%;
+      height: 13px;
+      background: linear-gradient(to bottom, #4a4a4c, #38383a);
+      border-radius: 0 0 5px 5px;
+      border: 1.5px solid #505052;
+      border-top: none;
+    }
+    .laptop__foot {
+      width: 26%;
+      height: 5px;
+      background: #30303a;
+      border-radius: 0 0 5px 5px;
+    }
+    /* mockup inside modal */
+    .modal__media .mockup-wrap {
+      background: transparent;
+      padding: 24px 8% 0;
+      min-height: 100%;
+    }
+    .modal__media-main:has(.mockup-wrap) {
+      overflow: visible;
+    }
+    .modal__media-main .mockup-wrap video {
+      height: auto;
+      object-fit: unset;
+    }
+
+    .pg-card__media {
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: var(--surface);
+    }
+    .pg-card__media video,
+    .pg-card__media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s var(--ease);
+    }
+    .pg-card:hover .pg-card__media video,
+    .pg-card:hover .pg-card__media img {
+      transform: scale(1.03);
+    }
+    .pg-card--a .pg-card__media,
+    .pg-card--b .pg-card__media,
+    .pg-card--d .pg-card__media,
+    .pg-card--e .pg-card__media {
+      aspect-ratio: 16 / 10;
+    }
+
+    /* Editorial card (Nuestro Tiempo) */
+    .pg-card--c {
+      flex-direction: row;
+      min-height: 380px;
+    }
+    .pg-card--c .pg-card__editorial {
+      flex: 0 0 45%;
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid var(--border);
+    }
+    .pg-card--c .pg-card__media {
+      flex: 1;
+      aspect-ratio: unset;
+    }
+    .pg-card__editorial-num {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .pg-card__editorial-title {
+      font-size: clamp(44px, 5.5vw, 68px);
+      font-weight: 700;
+      line-height: 0.9;
+      letter-spacing: -0.035em;
+    }
+    .pg-card__editorial-title em {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--accent);
+    }
+    .pg-card__editorial-desc {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--text-soft);
+      max-width: 38ch;
+    }
+    .pg-card__editorial-meta {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* Card info row */
+    .pg-card__info {
+      padding: 22px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border-top: 1px solid var(--border);
+    }
+    .pg-card__row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .pg-card__client {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .pg-card__type {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .pg-card__title {
+      font-size: clamp(18px, 2.2vw, 26px);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+    }
+    .pg-card__desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-soft);
+      max-width: 44ch;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       ABOUT
+    ════════════════════════════════════════════════════════════ */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .about__left {
+      padding: 72px 48px;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 40px;
+    }
+    .about__heading {
+      font-size: clamp(40px, 5.5vw, 68px);
+      font-weight: 700;
+      line-height: 0.92;
+      letter-spacing: -0.035em;
+    }
+    .about__heading em {
+      display: block;
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--text-soft);
+    }
+    .about__bio {
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--text-soft);
+      max-width: 42ch;
+    }
+    .about__bio strong { color: var(--text); font-weight: 500; }
+    .about__process {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .about__step {
+      display: grid;
+      grid-template-columns: 28px 1fr auto;
+      gap: 16px;
+      align-items: baseline;
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .about__step:last-child { border-bottom: none; }
+    .about__step-n {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+    }
+    .about__step-name { font-weight: 500; }
+    .about__step-detail {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: right;
+    }
+    .about__right {
+      padding: 72px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+    .about__section-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .skill-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .skill-cell {
+      background: var(--surface);
+      padding: 18px 20px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .skill-cell small {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-top: 3px;
+    }
+    .tool-cloud { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tool-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px 11px;
+    }
+    .avail {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 20px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .avail__dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      flex-shrink: 0;
+    }
+    .avail__text { font-size: 13px; font-weight: 500; }
+    .avail__text small {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       CONTACT
+    ════════════════════════════════════════════════════════════ */
+    .contact {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 72vh;
+      border-bottom: 1px solid var(--border);
+    }
+    .contact__left {
+      padding: 72px 48px;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .contact__heading {
+      font-size: clamp(52px, 8.5vw, 112px);
+      font-weight: 700;
+      line-height: 0.88;
+      letter-spacing: -0.04em;
+    }
+    .contact__heading em {
+      display: block;
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--accent);
+    }
+    .contact__sub {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--text-soft);
+      max-width: 36ch;
+      margin-top: 28px;
+    }
+    .contact__note {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.65;
+      max-width: 38ch;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+    }
+    .contact__right {
+      padding: 72px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .contact__links { display: flex; flex-direction: column; }
+    .contact__link {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.15s;
+    }
+    .contact__link:first-child { border-top: 1px solid var(--border); }
+    .contact__link:hover { color: var(--accent); }
+    .contact__link-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      width: 72px;
+      flex-shrink: 0;
+    }
+    .contact__link-value {
+      font-size: clamp(14px, 2vw, 20px);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      flex: 1;
+    }
+    .contact__link-arrow {
+      color: var(--accent);
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .contact__link:hover .contact__link-arrow { opacity: 1; transform: none; }
+    .contact__sign {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding-top: 32px;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       FOOTER
+    ════════════════════════════════════════════════════════════ */
+    .footer {
+      padding: 22px 48px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .footer span {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       TWEAKS
+    ════════════════════════════════════════════════════════════ */
+    .tweaks-toggle {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      z-index: 300;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--surface);
+      color: var(--text-soft);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+      transition: color 0.15s, transform 0.15s;
+    }
+    .tweaks-toggle:hover { color: var(--accent); transform: scale(1.08); }
+    .tweaks-panel {
+      position: fixed;
+      bottom: 84px; right: 28px;
+      z-index: 299;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      width: 280px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+      overflow: hidden;
+    }
+    .tweaks-panel__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .tweaks-panel__header span {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .tweaks-close { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 15px; padding: 0; line-height: 1; }
+    .tweak-section { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+    .tweak-section:last-child { border-bottom: none; }
+    .tweak-section__title { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+    .tweak-field { margin-bottom: 10px; }
+    .tweak-field:last-child { margin-bottom: 0; }
+    .tweak-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 7px; }
+    .tweak-radio-group { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tweak-radio { font-size: 12px; padding: 5px 12px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; color: var(--text-soft); background: var(--surface-2); user-select: none; }
+    .tweak-radio input { display: none; }
+    .tweak-radio.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+    .tweak-swatches { display: flex; gap: 7px; align-items: center; }
+    .tweak-swatch { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform 0.1s; }
+    .tweak-swatch:hover { transform: scale(1.18); }
+    .tweak-swatch.active { border-color: var(--text); }
+    .tweak-swatch-pick { position: relative; overflow: hidden; cursor: pointer; display: flex; }
+    .tweak-swatch-pick input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+    .tweak-input { width: 100%; padding: 7px 11px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--text); font-family: var(--font-sans); font-size: 13px; outline: none; }
+    .tweak-input:focus { border-color: var(--accent); }
+    .tweak-btn { width: 100%; padding: 9px 14px; background: var(--accent); color: var(--accent-ink); border: none; border-radius: 6px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: opacity 0.1s; }
+    .tweak-btn:hover { opacity: 0.88; }
+
+    /* ════════════════════════════════════════════════════════════
+       PROJECT MODAL
+    ════════════════════════════════════════════════════════════ */
+    .pg-card, .featured { cursor: pointer; }
+
+    .pg-card__cta {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-top: 10px;
+      transition: opacity 0.15s;
+    }
+    .pg-card:hover .pg-card__cta { opacity: 0.7; }
+    .featured__cta {
+      display: inline-flex;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.8);
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 9px 18px;
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      background: none;
+      cursor: pointer;
+      margin-top: 18px;
+      align-self: flex-start;
+      transition: background 0.15s, color 0.15s;
+    }
+    .featured__cta:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: rgba(0,0,0,0.82);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s var(--ease);
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 1080px;
+      max-height: 88vh;
+      display: grid;
+      grid-template-columns: 55% 45%;
+      overflow: hidden;
+      transform: translateY(24px) scale(0.975);
+      transition: transform 0.38s var(--ease);
+    }
+    .modal-overlay.open .modal { transform: none; }
+    .modal { position: relative; }
+    .modal__media {
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      overflow: hidden;
+    }
+    .modal__media-main {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      min-height: 200px;
+    }
+    .modal__media-main video,
+    .modal__media-main img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .modal__media-strip {
+      display: flex;
+      height: 74px;
+      gap: 3px;
+      background: var(--bg);
+      padding: 3px;
+      flex-shrink: 0;
+    }
+    .modal__thumb {
+      flex: 1;
+      overflow: hidden;
+      cursor: pointer;
+      opacity: 0.38;
+      transition: opacity 0.2s;
+      border-radius: 3px;
+    }
+    .modal__thumb.active { opacity: 1; outline: 2px solid var(--accent); outline-offset: 1px; }
+    .modal__thumb:hover:not(.active) { opacity: 0.65; }
+    .modal__thumb video, .modal__thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+    .modal__body {
+      padding: 44px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      overflow-y: auto;
+      position: relative;
+    }
+    .modal__close {
+      position: absolute;
+      top: 14px; right: 14px;
+      z-index: 20;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border: none;
+      border-radius: 50%;
+      width: 36px; height: 36px;
+      cursor: pointer;
+      color: #111;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+      transition: background 0.15s, transform 0.15s;
+    }
+    .modal__close:hover { background: #fff; transform: scale(1.08); }
+    .modal__index {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding-top: 6px;
+    }
+    .modal__title {
+      font-size: clamp(30px, 3.5vw, 48px);
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: -0.035em;
+    }
+    .modal__title em {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--text-soft);
+    }
+    .modal__subtitle {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--text);
+      letter-spacing: -0.015em;
+    }
+    .modal__type {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .modal__desc { flex: 1; }
+    .modal__desc p {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text-soft);
+      margin-bottom: 14px;
+    }
+    .modal__desc p:last-child { margin-bottom: 0; }
+    .modal__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent-ink);
+      background: var(--accent);
+      padding: 10px 20px;
+      border-radius: 8px;
+      align-self: flex-start;
+      transition: opacity 0.15s;
+    }
+    .modal__link:hover { opacity: 0.85; }
+    .modal__link--wip {
+      background: var(--surface-2);
+      color: var(--text-muted);
+      cursor: default;
+      pointer-events: none;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════════════════════════════════ */
+    @media (max-width: 760px) {
+      .modal { grid-template-columns: 1fr; max-height: 95vh; }
+      .modal__media { min-height: 240px; aspect-ratio: 16/9; }
+      .modal__body { padding: 32px 24px; }
+    }
+
+    @media (max-width: 960px) {
+      .nav { padding: 18px 24px; }
+      .nav__right { gap: 16px; }
+      .hero { padding: 90px 24px 44px; }
+      .featured__body { padding: 28px 24px 36px; }
+      .pg-header { padding: 44px 24px 32px; }
+      .pg-grid { grid-template-columns: 1fr; }
+      .pg-card--a, .pg-card--b, .pg-card--c, .pg-card--d, .pg-card--e { grid-column: 1 / -1; border-right: none; }
+      .pg-card--c { flex-direction: column; min-height: auto; }
+      .pg-card--c .pg-card__editorial { border-right: none; border-bottom: 1px solid var(--border); }
+      .pg-card--c .pg-card__media { aspect-ratio: 16 / 9; }
+      .pg-card--mc .pg-card__media { aspect-ratio: unset !important; min-height: 300px; overflow: visible; }
+      .pg-card__media { aspect-ratio: 16 / 9 !important; }
+      .about { grid-template-columns: 1fr; }
+      .about__left { border-right: none; border-bottom: 1px solid var(--border); padding: 52px 24px; }
+      .about__right { padding: 48px 24px; }
+      .contact { grid-template-columns: 1fr; }
+      .contact__left { border-right: none; border-bottom: 1px solid var(--border); padding: 52px 24px; }
+      .contact__right { padding: 48px 24px; }
+      .footer { padding: 20px 24px; }
+    }
+
+    @media print {
+      .nav, #tweaks-root, .tweaks-toggle, .tweaks-panel { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ──────────────────────────────────────────────────── -->
+  <nav class="nav">
+    <span class="nav__name" data-cover-name>Inés de la Vega</span>
+    <div class="nav__right">
+      <div class="lang-toggle">
+        <button class="lang-btn active" data-lang="es" onclick="setLang('es')">ES</button>
+        <span class="lang-sep">/</span>
+        <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+      </div>
+      <a href="#contacto" class="nav__cta" data-i18n="nav.cta">Trabajemos</a>
+    </div>
+  </nav>
+
+  <!-- ── HERO ─────────────────────────────────────────────────── -->
+  <section class="hero" id="inicio">
+    <div class="hero__top">
+      <span class="hero__top-label" data-cover-name>Inés de la Vega</span>
+      <span class="hero__top-label" data-i18n="hero.eyebrow">Product Designer · Madrid</span>
+    </div>
+    <div class="hero__main">
+      <p class="hero__intro" data-i18n="hero.intro">Principal Product Designer</p>
+      <em class="hero__num" data-i18n="hero.num">Inés<span class="hero__num-m">.</span></em>
+      <p class="hero__bio" data-i18n="hero.bio">Soy la persona que pregunta <strong>«¿para qué?»</strong> antes de abrir Figma. La que convierte conversaciones difíciles en decisiones claras. La que lidera equipos, negocia con el negocio y se asegura de que lo que llega a producción sea tan bueno como lo que había en el prototipo — y que el equipo haya disfrutado construyéndolo.</p>
+    </div>
+    <div class="hero__bottom">
+      <span class="hero__disciplines" data-i18n="hero.sub">UX &nbsp;·&nbsp; Producto digital &nbsp;·&nbsp; Gestión de equipo &nbsp;·&nbsp; Estrategia</span>
+      <span class="hero__scroll-hint" data-i18n="hero.hint">Ver trabajo</span>
+    </div>
+  </section>
+
+  <!-- ── FEATURED · ESFERA CAIXABANK ──────────────────────────── -->
+  <section class="featured" id="esfera" data-project="esfera">
+    <div class="featured__media">
+      <video autoplay loop muted playsinline
+        poster="Proyectos/Esfera%20CaixaBank/Captura%20de%20pantalla%202026-05-12%20a%20las%209.26.01.png">
+        <source src="Proyectos/Esfera%20CaixaBank/Esfera%20Caixa.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="featured__gradient"></div>
+    <div class="featured__body">
+      <div class="featured__header">
+        <span class="featured__index">01 / 07</span>
+        <span class="featured__tag" data-i18n="featured.tag">CaixaBank · 2024 · Plataforma de contenido</span>
+      </div>
+      <div class="featured__footer">
+        <h2 class="featured__title">Esfera<br><em>CaixaBank</em></h2>
+        <p class="featured__proj-type" data-i18n="featured.type">Producto digital · Identidad · Sistema de componentes</p>
+        <p class="featured__desc" data-i18n="featured.desc">Dimos a este proyecto su propio lenguaje visual, tomando ciertas libertades con la marca matriz para dotar al producto de una identidad más fresca y flexible. El resultado: una interfaz limpia y jerarquizada, con un sistema de componentes escalable para podcasts, artículos, audio, vídeo e historias.</p>
+        <button class="featured__cta" data-i18n="card.cta">Saber más →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROYECTOS ─────────────────────────────────────────────── -->
+  <div class="pg-header" id="proyectos">
+    <h2 data-i18n="pg.title">Más <em>trabajo</em></h2>
+    <span data-i18n="pg.count">05 proyectos</span>
+  </div>
+
+  <div class="pg-grid">
+
+    <!-- 02 · Somos Pacientes -->
+    <article class="pg-card pg-card--a" data-project="somos">
+      <div class="pg-card__media">
+        <video autoplay loop muted playsinline
+          poster="Proyectos/Somos%20pacientes/somos%20pacientes%202.jpg">
+          <source src="Proyectos/Somos%20pacientes/somos%20pacientes.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="pg-card__info">
+        <div class="pg-card__row">
+          <span class="pg-card__client">Somos Pacientes · 2024</span>
+          <span class="pg-card__type" data-i18n="sp.type">App · UX/UI</span>
+        </div>
+        <h3 class="pg-card__title">Somos Pacientes</h3>
+        <p class="pg-card__desc" data-i18n="sp.desc">Plataforma digital que conecta pacientes con su equipo médico y su comunidad. Una interfaz accesible y cálida donde la información clínica y lo humano conviven sin fricción.</p>
+        <span class="pg-card__cta" data-i18n="card.cta">Saber más →</span>
+      </div>
+    </article>
+
+    <!-- 03 · Universidad de la Sabana -->
+    <article class="pg-card pg-card--b" data-project="sabana">
+      <div class="pg-card__media">
+        <video autoplay loop muted playsinline
+          poster="Proyectos/Universidad%20de%20la%20Sabana/unisabana2.jpg">
+          <source src="Proyectos/Universidad%20de%20la%20Sabana/unisabana.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="pg-card__info">
+        <div class="pg-card__row">
+          <span class="pg-card__client">Univ. de la Sabana · 2023</span>
+          <span class="pg-card__type" data-i18n="us.type">Web · Marca</span>
+        </div>
+        <h3 class="pg-card__title">Universidad de la Sabana</h3>
+        <p class="pg-card__desc" data-i18n="us.desc">Sistema visual escalable que moderniza una institución sin perder solidez. Un rediseño que afecta a todos los departamentos con un solo lenguaje compartido.</p>
+        <span class="pg-card__cta" data-i18n="card.cta">Saber más →</span>
+      </div>
+    </article>
+
+    <!-- 04 · Nuestro Tiempo — editorial full-width -->
+    <article class="pg-card pg-card--c" data-project="nuestro">
+      <div class="pg-card__editorial">
+        <span class="pg-card__editorial-num" data-i18n="nt.num">04 / 06 · Editorial · Web · 2024</span>
+        <div>
+          <h3 class="pg-card__editorial-title">Nuestro<br><em>Tiempo</em></h3>
+          <p class="pg-card__editorial-desc" data-i18n="nt.desc" style="margin-top:16px">Publicación cultural digital con identidad editorial propia. Tipografía expresiva, layouts flexibles y una experiencia de lectura que trata el contenido con el respeto que merece.</p>
+          <span class="pg-card__cta" data-i18n="card.cta" style="margin-top:14px">Saber más →</span>
+        </div>
+        <span class="pg-card__editorial-meta">Nuestro Tiempo · Madrid · 2024</span>
+      </div>
+      <div class="pg-card__media">
+        <video autoplay loop muted playsinline
+          poster="Proyectos/Nuestro%20tiempo/nuestro%20tiempo%202.jpg">
+          <source src="Proyectos/Nuestro%20tiempo/Nuestro%20Tiempo.mp4" type="video/mp4">
+        </video>
+      </div>
+    </article>
+
+    <!-- 05 · Avicena -->
+    <article class="pg-card pg-card--d" data-project="avicena">
+      <div class="pg-card__media">
+        <video autoplay loop muted playsinline
+          poster="Proyectos/Avicena/Avicena%20web.png">
+          <source src="Proyectos/Avicena/Avicena%201.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="pg-card__info">
+        <div class="pg-card__row">
+          <span class="pg-card__client">Avicena · 2024</span>
+          <span class="pg-card__type" data-i18n="av.type">Marca · Web</span>
+        </div>
+        <h3 class="pg-card__title">Avicena</h3>
+        <p class="pg-card__desc" data-i18n="av.desc">Identidad y web para una clínica médica especializada. Un diseño que transmite confianza sin frialdad, y modernidad sin perder calidez.</p>
+        <span class="pg-card__cta" data-i18n="card.cta">Saber más →</span>
+      </div>
+    </article>
+
+    <!-- 06 · Yoin -->
+    <article class="pg-card pg-card--e" data-project="yoin">
+      <div class="pg-card__media">
+        <video autoplay loop muted playsinline
+          poster="Proyectos/Yoin/Yoin%203.png">
+          <source src="Proyectos/Yoin/Yoin.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="pg-card__info">
+        <div class="pg-card__row">
+          <span class="pg-card__client">Yoin · 2025</span>
+          <span class="pg-card__type" data-i18n="yo.type">App · Marca</span>
+        </div>
+        <h3 class="pg-card__title">Yoin</h3>
+        <p class="pg-card__desc" data-i18n="yo.desc">El club para clubes. App de acceso privado para descubrir y compartir planes con personas afines. Social design con una capa de lifestyle y discovery.</p>
+        <span class="pg-card__cta" data-i18n="card.cta">Saber más →</span>
+      </div>
+    </article>
+
+    <!-- 07 · Mencrush -->
+    <article class="pg-card pg-card--c pg-card--mc" data-project="mencrush">
+      <div class="pg-card__editorial">
+        <span class="pg-card__editorial-num" data-i18n="mc.num">07 / 07 · Plataforma · Marca · 2024</span>
+        <div>
+          <h3 class="pg-card__editorial-title">Men<br><em>crush</em></h3>
+          <p class="pg-card__editorial-desc" data-i18n="mc.desc" style="margin-top:16px">Ecosistema digital completo creado de cero: plataforma de contenido, identidad visual, newsletters, web, CRM y toda la comunicación digital.</p>
+          <span class="pg-card__cta" data-i18n="card.cta" style="margin-top:14px">Saber más →</span>
+        </div>
+        <span class="pg-card__editorial-meta">Mencrush · 2024</span>
+      </div>
+      <div class="pg-card__media">
+        <div class="mockup-wrap">
+          <div class="laptop">
+            <div class="laptop__lid">
+              <div class="laptop__screen">
+                <video autoplay loop muted playsinline>
+                  <source src="Proyectos/Mencrush/Grabaci%C3%B3n%20de%20pantalla%202026-05-12%20a%20las%2013.54.04.mov" type="video/mp4">
+                </video>
+              </div>
+            </div>
+            <div class="laptop__base"></div>
+            <div class="laptop__foot"></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- ── SOBRE MÍ ───────────────────────────────────────────────── -->
+  <section class="about" id="sobre-mi">
+    <div class="about__left">
+      <div>
+        <h2 class="about__heading r" data-i18n="about.heading">Del problema<br><em>al producto.</em></h2>
+        <p class="about__bio r r1" data-i18n="about.bio" style="margin-top:32px">Ocho años diseñando productos que la gente usa. He trabajado en <strong>banca, salud y educación</strong> — sectores donde el diseño mediocre tiene coste real. Entiendo el negocio, hablo con ingeniería y entrego diseños que funcionan en producción, no sólo en Figma.</p>
+      </div>
+      <div class="about__process r r2">
+        <div class="about__step">
+          <span class="about__step-n">01</span>
+          <span class="about__step-name" data-i18n="step1.name">Descubrimiento</span>
+          <span class="about__step-detail" data-i18n="step1.detail">Research · Entrevistas · Analytics</span>
+        </div>
+        <div class="about__step">
+          <span class="about__step-n">02</span>
+          <span class="about__step-name" data-i18n="step2.name">Definición</span>
+          <span class="about__step-detail" data-i18n="step2.detail">JTBD · Flujos · Arquitectura</span>
+        </div>
+        <div class="about__step">
+          <span class="about__step-n">03</span>
+          <span class="about__step-name" data-i18n="step3.name">Diseño</span>
+          <span class="about__step-detail" data-i18n="step3.detail">Wireframes → UI → Sistema</span>
+        </div>
+        <div class="about__step">
+          <span class="about__step-n">04</span>
+          <span class="about__step-name" data-i18n="step4.name">Validación</span>
+          <span class="about__step-detail" data-i18n="step4.detail">Tests · A/B · Iteración</span>
+        </div>
+        <div class="about__step">
+          <span class="about__step-n">05</span>
+          <span class="about__step-name" data-i18n="step5.name">Lanzamiento</span>
+          <span class="about__step-detail" data-i18n="step5.detail">Handoff · QA · Post-launch</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="about__right">
+      <div class="r">
+        <p class="about__section-label" data-i18n="skills.label">Especialidades</p>
+        <div class="skill-grid">
+          <div class="skill-cell" data-i18n="skill.1">Product design<small data-i18n="skill.1s">End-to-end</small></div>
+          <div class="skill-cell" data-i18n="skill.2">UX research<small data-i18n="skill.2s">Qual &amp; quant</small></div>
+          <div class="skill-cell" data-i18n="skill.3">Design systems<small data-i18n="skill.3s">Escalables</small></div>
+          <div class="skill-cell" data-i18n="skill.4">Brand identity<small data-i18n="skill.4s">Estratégica</small></div>
+        </div>
+      </div>
+      <div class="r r1">
+        <p class="about__section-label" data-i18n="tools.label">Herramientas</p>
+        <div class="tool-cloud">
+          <span class="tool-tag">Figma</span>
+          <span class="tool-tag">FigJam</span>
+          <span class="tool-tag">Framer</span>
+          <span class="tool-tag">Webflow</span>
+          <span class="tool-tag">Adobe CC</span>
+          <span class="tool-tag">After Effects</span>
+          <span class="tool-tag">Maze</span>
+          <span class="tool-tag">Hotjar</span>
+          <span class="tool-tag">Mixpanel</span>
+        </div>
+      </div>
+      <div class="r r2">
+        <p class="about__section-label" data-i18n="lang.label">Idiomas</p>
+        <div class="tool-cloud">
+          <span class="tool-tag" data-i18n="lang.es">Español · Nativo</span>
+          <span class="tool-tag" data-i18n="lang.en">Inglés · C1</span>
+          <span class="tool-tag" data-i18n="lang.fr">Francés · B2</span>
+        </div>
+      </div>
+      <div class="avail r r3">
+        <div class="avail__dot"></div>
+        <div class="avail__text" data-i18n="avail.text">
+          Disponible para nuevos proyectos
+          <small data-i18n="avail.detail">Freelance · Posición estable · Madrid o remoto</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACTO ───────────────────────────────────────────────── -->
+  <section class="contact" id="contacto">
+    <div class="contact__left">
+      <div>
+        <h2 class="contact__heading r" data-i18n="contact.heading">Si tienes<br>un reto<br><em>difícil.</em></h2>
+        <p class="contact__sub r r1" data-i18n="contact.sub">Cuéntame qué quieres construir. En 48 horas te respondo con ideas concretas.</p>
+      </div>
+      <p class="contact__note r r2" data-i18n="contact.note">Tomo proyectos de forma selectiva para mantener el foco y la calidad. Si nuestros objetivos encajan, hacemos algo que valga la pena.</p>
+    </div>
+    <div class="contact__right">
+      <div class="contact__links">
+        <a href="mailto:inesdelavegalopez@gmail.com" class="contact__link r">
+          <span class="contact__link-label">Email</span>
+          <span class="contact__link-value">inesdelavegalopez@gmail.com</span>
+          <span class="contact__link-arrow">↗</span>
+        </a>
+        <a href="#" class="contact__link r r1">
+          <span class="contact__link-label">LinkedIn</span>
+          <span class="contact__link-value">Inés de la Vega</span>
+          <span class="contact__link-arrow">↗</span>
+        </a>
+      </div>
+      <p class="contact__sign r r3">
+        <span data-cover-name>Inés de la Vega</span> &nbsp;·&nbsp; <span data-i18n="contact.role">Product Designer</span> &nbsp;·&nbsp; Madrid 2025
+      </p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span data-cover-name>Inés de la Vega</span>
+    <span>2025</span>
+  </footer>
+
+  <!-- ── MODAL ────────────────────────────────────────────── -->
+  <div id="modal-overlay" class="modal-overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <button class="modal__close" onclick="closeModal()">✕</button>
+      <div class="modal__media"></div>
+      <div class="modal__body">
+        <span class="modal__index"></span>
+        <h2 class="modal__title"></h2>
+        <p class="modal__subtitle"></p>
+        <span class="modal__type"></span>
+        <div class="modal__desc"></div>
+        <a class="modal__link" href="#" target="_blank" rel="noopener"></a>
+      </div>
+    </div>
+  </div>
+
+  <div id="tweaks-root"></div>
+
+  <!-- ════════════════════════════════════════════════════════════
+       I18N + SCRIPTS
+  ════════════════════════════════════════════════════════════ -->
+  <script>
+    /* ── Translations ──────────────────────────────────────────── */
+    const i18n = {
+      es: {
+        'nav.cta':          'Trabajemos',
+        'hero.eyebrow':     'Product Designer · Madrid',
+        'hero.intro':       'Principal Product Designer',
+        'hero.num':         'Inés<span class="hero__num-m">.</span>',
+        'hero.bio':         'Soy la persona que pregunta <strong>«¿para qué?»</strong> antes de abrir Figma. La que convierte conversaciones difíciles en decisiones claras. La que lidera equipos, negocia con el negocio y se asegura de que lo que llega a producción sea tan bueno como lo que había en el prototipo — y que el equipo haya disfrutado construyéndolo.',
+        'hero.sub':         'UX &nbsp;·&nbsp; Producto digital &nbsp;·&nbsp; Gestión de equipo &nbsp;·&nbsp; Estrategia',
+        'hero.hint':        'Ver trabajo',
+
+        'featured.tag':     'CaixaBank · 2024 · Plataforma de contenido',
+        'featured.type':    'Producto digital · Identidad · Sistema de componentes',
+        'featured.desc':    'Dimos a este proyecto su propio lenguaje visual, tomando ciertas libertades con la marca matriz para dotar al producto de una identidad más fresca y flexible, manteniendo coherencia con el universo CaixaBank. El resultado: una interfaz limpia y jerarquizada con un sistema de componentes escalable para podcasts, artículos, audio, vídeo e historias.',
+
+        'pg.title':         'Más <em>trabajo</em>',
+        'pg.count':         '06 proyectos',
+
+        'sp.type':          'App · UX/UI',
+        'sp.desc':          'Plataforma digital que conecta pacientes con su equipo médico y su comunidad. Una interfaz accesible y cálida donde la información clínica y lo humano conviven sin fricción.',
+
+        'us.type':          'Web · Marca',
+        'us.desc':          'Sistema visual escalable que moderniza una institución sin perder solidez. Un rediseño que afecta a todos los departamentos con un solo lenguaje compartido.',
+
+        'nt.num':           '04 / 07 · Editorial · Web · 2024',
+        'nt.desc':          'Publicación cultural digital con identidad editorial propia. Tipografía expresiva, layouts flexibles y una experiencia de lectura que trata el contenido con el respeto que merece.',
+
+        'av.type':          'Marca · Web',
+        'av.desc':          'Identidad y web para una clínica médica especializada. Un diseño que transmite confianza sin frialdad, y modernidad sin perder calidez.',
+
+        'yo.type':          'App · Marca',
+        'yo.desc':          'El club para clubes. App de acceso privado para descubrir y compartir planes con personas afines. Social design con una capa de lifestyle y discovery.',
+
+        'mc.num':           '07 / 07 · Plataforma · Marca · 2024',
+        'mc.type':          'Plataforma · Marca · Contenido · CRM',
+        'mc.desc':          'Ecosistema digital completo creado de cero: plataforma de contenido, identidad visual, newsletters, web, CRM y toda la comunicación digital.',
+
+        'about.heading':    'Del problema<br><em>al producto.</em>',
+        'about.bio':        'Ocho años diseñando productos que la gente usa. He trabajado en <strong>banca, salud y educación</strong> — sectores donde el diseño mediocre tiene coste real. Entiendo el negocio, hablo con ingeniería y entrego diseños que funcionan en producción, no sólo en Figma.',
+
+        'step1.name':       'Descubrimiento',
+        'step1.detail':     'Research · Entrevistas · Analytics',
+        'step2.name':       'Definición',
+        'step2.detail':     'JTBD · Flujos · Arquitectura',
+        'step3.name':       'Diseño',
+        'step3.detail':     'Wireframes → UI → Sistema',
+        'step4.name':       'Validación',
+        'step4.detail':     'Tests · A/B · Iteración',
+        'step5.name':       'Lanzamiento',
+        'step5.detail':     'Handoff · QA · Post-launch',
+
+        'skills.label':     'Especialidades',
+        'skill.1':          'Product design',
+        'skill.1s':         'End-to-end',
+        'skill.2':          'UX research',
+        'skill.2s':         'Cual. & cuant.',
+        'skill.3':          'Design systems',
+        'skill.3s':         'Escalables',
+        'skill.4':          'Brand identity',
+        'skill.4s':         'Estratégica',
+
+        'tools.label':      'Herramientas',
+        'lang.label':       'Idiomas',
+        'lang.es':          'Español · Nativo',
+        'lang.en':          'Inglés · C1',
+        'lang.fr':          'Francés · B2',
+
+        'avail.text':       'Disponible para nuevos proyectos',
+        'avail.detail':     'Freelance · Posición estable · Madrid o remoto',
+
+        'contact.heading':  'Si tienes<br>un reto<br><em>difícil.</em>',
+        'contact.sub':      'Cuéntame qué quieres construir. En 48 horas te respondo con ideas concretas.',
+        'contact.note':     'Tomo proyectos de forma selectiva para mantener el foco y la calidad. Si nuestros objetivos encajan, hacemos algo que valga la pena.',
+        'contact.role':     'Product Designer',
+        'card.cta':         'Saber más →',
+      },
+
+      en: {
+        'nav.cta':          "Let's talk",
+        'hero.eyebrow':     'Product Designer · Madrid',
+        'hero.intro':       'Principal Product Designer',
+        'hero.num':         'Inés<span class="hero__num-m">.</span>',
+        'hero.bio':         'I\'m the person who asks <strong>«why?»</strong> before opening Figma. Who turns difficult conversations into clear decisions. Who leads teams, negotiates with the business, and makes sure that what ships is as good as what was in the prototype — and that the team enjoyed building it.',
+        'hero.sub':         'UX &nbsp;·&nbsp; Digital product &nbsp;·&nbsp; Team leadership &nbsp;·&nbsp; Strategy',
+        'hero.hint':        'See work',
+
+        'featured.tag':     'CaixaBank · 2024 · Content platform',
+        'featured.type':    'Digital product · Identity · Component system',
+        'featured.desc':    'We gave this project its own graphic style, taking certain liberties with the parent brand to give the product a fresher, more flexible identity, while maintaining visual consistency with the CaixaBank universe. The result: a clean, hierarchical interface supported by a scalable component system for podcasts, articles, audio, video, and stories.',
+
+        'pg.title':         'More <em>work</em>',
+        'pg.count':         '06 projects',
+
+        'sp.type':          'App · UX/UI',
+        'sp.desc':          'A digital platform connecting patients with their medical team and community. An accessible, warm interface where clinical information and human connection coexist without friction.',
+
+        'us.type':          'Web · Brand',
+        'us.desc':          'A scalable visual system that modernises an institution without losing its strength. A redesign that serves every department through a single shared language.',
+
+        'nt.num':           '04 / 07 · Editorial · Web · 2024',
+        'nt.desc':          'A digital cultural publication with its own editorial identity. Expressive typography, flexible layouts, and a reading experience that treats content with the respect it deserves.',
+
+        'av.type':          'Brand · Web',
+        'av.desc':          'Identity and website for a specialised medical clinic. A design that conveys trust without coldness, and modernity without losing warmth.',
+
+        'yo.type':          'App · Brand',
+        'yo.desc':          'The club for clubs. A private-access app for discovering and sharing plans with like-minded people. Social design with a lifestyle and discovery layer.',
+
+        'mc.num':           '07 / 07 · Platform · Brand · 2024',
+        'mc.type':          'Platform · Brand · Content · CRM',
+        'mc.desc':          'Full digital ecosystem built from scratch: content platform, visual identity, newsletters, web, CRM and all digital communication.',
+
+        'about.heading':    'From problem<br><em>to product.</em>',
+        'about.bio':        'Eight years designing products people actually use. I\'ve worked in <strong>banking, healthcare, and education</strong> — sectors where mediocre design has a real cost. I understand business, speak to engineering, and deliver designs that work in production, not just in Figma.',
+
+        'step1.name':       'Discovery',
+        'step1.detail':     'Research · Interviews · Analytics',
+        'step2.name':       'Definition',
+        'step2.detail':     'JTBD · Flows · Architecture',
+        'step3.name':       'Design',
+        'step3.detail':     'Wireframes → UI → System',
+        'step4.name':       'Validation',
+        'step4.detail':     'Tests · A/B · Iteration',
+        'step5.name':       'Launch',
+        'step5.detail':     'Handoff · QA · Post-launch',
+
+        'skills.label':     'Specialties',
+        'skill.1':          'Product design',
+        'skill.1s':         'End-to-end',
+        'skill.2':          'UX research',
+        'skill.2s':         'Qual & quant',
+        'skill.3':          'Design systems',
+        'skill.3s':         'Scalable',
+        'skill.4':          'Brand identity',
+        'skill.4s':         'Strategic',
+
+        'tools.label':      'Tools',
+        'lang.label':       'Languages',
+        'lang.es':          'Spanish · Native',
+        'lang.en':          'English · C1',
+        'lang.fr':          'French · B2',
+
+        'avail.text':       'Available for new projects',
+        'avail.detail':     'Freelance · Full-time · Madrid or remote',
+
+        'contact.heading':  'If you have<br>a hard<br><em>problem.</em>',
+        'contact.sub':      'Tell me what you want to build. I\'ll get back to you within 48 hours with concrete ideas.',
+        'contact.note':     'I take on projects selectively to maintain focus and quality. If our goals align, we make something worth making.',
+        'contact.role':     'Product Designer',
+        'card.cta':         'Learn more →',
+      }
+    };
+
+    /* ── Skill cells need special handling (inner html with <small>) */
+    const skillCells = {
+      es: [
+        ['Product design', 'End-to-end'],
+        ['UX research',    'Cual. & cuant.'],
+        ['Design systems', 'Escalables'],
+        ['Brand identity', 'Estratégica'],
+      ],
+      en: [
+        ['Product design', 'End-to-end'],
+        ['UX research',    'Qual & quant'],
+        ['Design systems', 'Scalable'],
+        ['Brand identity', 'Strategic'],
+      ],
+    };
+
+    let currentLang = localStorage.getItem('_lang') || 'es';
+
+    function setLang(lang) {
+      currentLang = lang;
+      localStorage.setItem('_lang', lang);
+      document.documentElement.lang = lang;
+
+      // Update simple elements
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (i18n[lang][key] !== undefined) el.innerHTML = i18n[lang][key];
+      });
+
+      // Update skill cells (text + small)
+      document.querySelectorAll('[data-i18n^="skill."][data-i18n$=""]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (!key.endsWith('s')) {
+          const idx = parseInt(key.split('.')[1]) - 1;
+          const cells = skillCells[lang];
+          if (cells && cells[idx]) {
+            el.innerHTML = cells[idx][0] + '<small>' + cells[idx][1] + '</small>';
+          }
+        }
+      });
+
+      // Update lang buttons
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+    }
+
+    /* ── Project modal ────────────────────────────────────────── */
+    const PROJECTS = {
+      esfera: {
+        index: '01 / 07', client: 'CaixaBank · 2024',
+        media: [
+          { type: 'video', src: 'Proyectos/Esfera%20CaixaBank/Esfera%20Caixa.mp4',       poster: 'Proyectos/Esfera%20CaixaBank/Captura%20de%20pantalla%202026-05-12%20a%20las%209.26.01.png' },
+          { type: 'video', src: 'Proyectos/Esfera%20CaixaBank/Esfera%20caixa%202.mp4',   poster: 'Proyectos/Esfera%20CaixaBank/Captura%20de%20pantalla%202026-05-12%20a%20las%209.26.25.png' },
+          { type: 'img',   src: 'Proyectos/Esfera%20CaixaBank/Captura%20de%20pantalla%202026-05-12%20a%20las%209.26.01.png' },
+          { type: 'img',   src: 'Proyectos/Esfera%20CaixaBank/Captura%20de%20pantalla%202026-05-12%20a%20las%209.26.25.png' },
+        ],
+        url: 'https://www.caixabank.com/es/esfera.html',
+        title:    { es: 'Esfera<br><em>CaixaBank</em>',            en: 'Esfera<br><em>CaixaBank</em>' },
+        subtitle: { es: 'Plataforma de contenido digital para el ecosistema CaixaBank.', en: 'Digital content platform for the CaixaBank ecosystem.' },
+        type:     { es: 'Producto digital · Identidad · Sistema de componentes',         en: 'Digital product · Identity · Component system' },
+        desc:     {
+          es: 'CaixaBank contaba con un volumen enorme de contenido disperso por toda la organización, generado desde áreas muy distintas, cada una con sus propias prioridades. Gran parte del trabajo fue de alineación: entender qué quería comunicar cada stakeholder, mediar entre visiones a veces contradictorias y traducir todo eso en un sistema coherente.\n\nEl resultado fue una interfaz limpia y jerarquizada, con una identidad propia que convive con la marca madre, y un sistema de componentes escalable que da cabida a múltiples formatos: artículos, podcasts, vídeo, audio e historias.',
+          en: 'CaixaBank had an enormous volume of content scattered across the organisation, generated by very different areas with their own priorities. Much of the work was alignment: understanding what each stakeholder wanted to say, mediating contradictory visions, and translating it all into a coherent system.\n\nThe result: a clean, hierarchical interface with its own identity that coexists with the parent brand, and a scalable component system for articles, podcasts, video, audio, and stories.',
+        },
+      },
+      somos: {
+        index: '02 / 07', client: 'Somos Pacientes · 2024',
+        media: [
+          { type: 'video', src: 'Proyectos/Somos%20pacientes/somos%20pacientes.mp4',   poster: 'Proyectos/Somos%20pacientes/somos%20pacientes%202.jpg' },
+          { type: 'video', src: 'Proyectos/Somos%20pacientes/somos%20pacientes%203.mp4' },
+          { type: 'img',   src: 'Proyectos/Somos%20pacientes/somos%20pacientes%202.jpg' },
+        ],
+        url: 'https://www.somospacientes.com/',
+        title:    { es: 'Somos<br><em>Pacientes</em>', en: 'Somos<br><em>Pacientes</em>' },
+        subtitle: { es: 'Plataforma digital de comunidad y seguimiento para pacientes crónicos.', en: 'Digital community and tracking platform for chronic patients.' },
+        type:     { es: 'App · UX/UI', en: 'App · UX/UI' },
+        desc:     {
+          es: 'El proyecto partió de un problema real: los pacientes con enfermedades crónicas necesitan algo más que información clínica; necesitan sentirse acompañados.\n\nInvestigamos las necesidades y fricciones reales de pacientes crónicos y diseñamos una plataforma que conecta al paciente con su equipo médico y con otras personas en situaciones similares, reduciendo el aislamiento y mejorando la adherencia al tratamiento.',
+          en: 'The project started from a real problem: patients with chronic illnesses need more than clinical information — they need to feel supported.\n\nWe researched the real needs and friction points of chronic patients and designed a platform connecting them with their medical team and with others in similar situations, reducing isolation and improving treatment adherence.',
+        },
+      },
+      sabana: {
+        index: '03 / 07', client: 'Univ. de la Sabana · 2023',
+        media: [
+          { type: 'video', src: 'Proyectos/Universidad%20de%20la%20Sabana/unisabana.mp4',   poster: 'Proyectos/Universidad%20de%20la%20Sabana/unisabana2.jpg' },
+          { type: 'video', src: 'Proyectos/Universidad%20de%20la%20Sabana/unisabana%203.mp4' },
+          { type: 'img',   src: 'Proyectos/Universidad%20de%20la%20Sabana/unisabana2.jpg' },
+        ],
+        url: 'https://www.unisabana.edu.co/',
+        title:    { es: 'Universidad<br><em>de la Sabana</em>', en: 'Universidad<br><em>de la Sabana</em>' },
+        subtitle: { es: 'Rediseño digital para una institución con cinco perfiles de usuario distintos.', en: 'Digital redesign for an institution with five distinct user profiles.' },
+        type:     { es: 'Web · Marca', en: 'Web · Brand' },
+        desc:     {
+          es: 'Mapeamos los problemas cotidianos de cinco perfiles de usuario distintos a través de entrevistas, tests y cuestionarios con más de 4.700 participantes. La investigación nos permitió priorizar con criterio y tomar decisiones de diseño fundamentadas en comportamiento real, no en suposiciones.',
+          en: 'We mapped the everyday problems of five different user profiles through interviews, tests and questionnaires with more than 4,700 participants. The research allowed us to prioritise with real criteria and make design decisions grounded in actual behaviour, not assumptions.',
+        },
+      },
+      nuestro: {
+        index: '04 / 07', client: 'Nuestro Tiempo · 2024',
+        media: [
+          { type: 'video', src: 'Proyectos/Nuestro%20tiempo/Nuestro%20Tiempo.mp4',        poster: 'Proyectos/Nuestro%20tiempo/nuestro%20tiempo%202.jpg' },
+          { type: 'video', src: 'Proyectos/Nuestro%20tiempo/nuestro%20tiempo%203.mp4' },
+          { type: 'video', src: 'Proyectos/Nuestro%20tiempo/nt%204.mp4' },
+          { type: 'img',   src: 'Proyectos/Nuestro%20tiempo/nuestro%20tiempo%202.jpg' },
+        ],
+        url: 'https://nuestrotiempo.unav.edu/',
+        title:    { es: 'Nuestro<br><em>Tiempo</em>', en: 'Nuestro<br><em>Tiempo</em>' },
+        subtitle: { es: 'Rediseño digital de una revista con setenta años de historia y lenguaje propio.', en: 'Digital redesign of a magazine with seventy years of history and its own voice.' },
+        type:     { es: 'Editorial · Web', en: 'Editorial · Web' },
+        desc:     {
+          es: 'Analizamos cómo leían sus lectores, dónde abandonaban y qué estructura mental traían al llegar.\n\nCon ese diagnóstico rediseñamos la arquitectura de contenidos, introdujimos nuevos formatos nativos digitales y renovamos el sistema visual para pasar de una experiencia anticuada a una publicación moderna sin perder su identidad. También rediseñamos la newsletter como pieza editorial propia.',
+          en: 'We analysed how readers consumed content, where they dropped off, and what mental model they arrived with.\n\nWith that diagnosis we redesigned the content architecture, introduced native digital formats, and renewed the visual system — moving from an outdated experience to a modern publication without losing its identity. We also redesigned the newsletter as a standalone editorial piece.',
+        },
+      },
+      avicena: {
+        index: '05 / 07', client: 'Avicena · 2024',
+        media: [
+          { type: 'video', src: 'Proyectos/Avicena/Avicena%201.mp4', poster: 'Proyectos/Avicena/Avicena%20web.png' },
+          { type: 'img',   src: 'Proyectos/Avicena/Avicena%202.png' },
+          { type: 'img',   src: 'Proyectos/Avicena/Avicena%20web.png' },
+        ],
+        url: 'https://avicenaproject.com/',
+        title:    { es: '<em>Avicena</em>', en: '<em>Avicena</em>' },
+        subtitle: { es: 'Identidad visual y presencia digital para una clínica médica especializada.', en: 'Visual identity and digital presence for a specialised medical clinic.' },
+        type:     { es: 'Marca · Web', en: 'Brand · Web' },
+        desc:     {
+          es: 'Un diseño que transmite confianza sin frialdad, y modernidad sin perder calidez.\n\nTrabajamos el lenguaje visual desde cero: cromática, tipografía, sistema de iconografía e implementación web, construyendo una marca que se siente tan seria como el especialista que hay detrás.',
+          en: 'A design that conveys trust without coldness, and modernity without losing warmth.\n\nWe built the visual language from scratch: colour, typography, icon system and web implementation — creating a brand that feels as serious as the specialist behind it.',
+        },
+      },
+      yoin: {
+        index: '06 / 07', client: 'Yoin · 2025',
+        media: [
+          { type: 'video', src: 'Proyectos/Yoin/Yoin.mp4',  poster: 'Proyectos/Yoin/Yoin%203.png' },
+          { type: 'img',   src: 'Proyectos/Yoin/Yoin2.png' },
+          { type: 'img',   src: 'Proyectos/Yoin/Yoin%203.png' },
+        ],
+        url: null, wip: true,
+        title:    { es: '<em>Yoin</em>',   en: '<em>Yoin</em>' },
+        subtitle: { es: 'App de acceso privado para descubrir y compartir planes con personas afines.', en: 'Private-access app to discover and share plans with like-minded people.' },
+        type:     { es: 'App · Marca', en: 'App · Brand' },
+        desc:     {
+          es: 'Diseñamos una experiencia que combina lo mejor del diseño social con una capa de lifestyle y descubrimiento.\n\nEl reto fue encontrar el equilibrio entre una estética aspiracional y una interfaz accesible: que se sintiera exclusiva sin resultar fría, dinámica sin perder claridad. Trabajamos la jerarquía visual, el uso de la fotografía y el sistema de color para transmitir comunidad y movimiento.',
+          en: 'We designed an experience combining the best of social design with a lifestyle and discovery layer.\n\nThe challenge was balancing an aspirational aesthetic with an accessible interface: exclusive without being cold, dynamic without losing clarity. We worked on visual hierarchy, photography usage, and the colour system to convey community and movement.',
+        },
+      },
+      mencrush: {
+        index: '07 / 07', client: 'Mencrush · 2024',
+        mockup: 'laptop',
+        media: [
+          { type: 'video', src: 'Proyectos/Mencrush/Grabaci%C3%B3n%20de%20pantalla%202026-05-12%20a%20las%2013.54.04.mov' },
+          { type: 'video', src: 'Proyectos/Mencrush/Grabaci%C3%B3n%20de%20pantalla%202026-05-12%20a%20las%2013.54.41.mov' },
+        ],
+        url: 'https://mencrush.com/',
+        title:    { es: '<em>Mencrush</em>', en: '<em>Mencrush</em>' },
+        subtitle: { es: 'Ecosistema digital completo creado de cero — plataforma, marca y contenido.', en: 'Full digital ecosystem built from scratch — platform, brand and content.' },
+        type:     { es: 'Plataforma · Marca · Contenido · CRM', en: 'Platform · Brand · Content · CRM' },
+        desc:     {
+          es: 'Mencrush llegó sin nada: sin identidad, sin sistema, sin plataforma. Lo construimos todo desde cero.\n\nCreamos la identidad visual completa y la trasladamos a cada canal: web, redes sociales, newsletter y CRM. Diseñamos el sistema editorial para que el contenido fuera consistente y escalable — plantillas, guías de tono, flujos de publicación. Y desarrollamos todos los recursos de comunicación digital, desde las creatividades para redes hasta los correos transaccionales.\n\nEl resultado es un ecosistema donde cada pieza habla el mismo idioma visual, independientemente del canal.',
+          en: 'Mencrush arrived with nothing: no identity, no system, no platform. We built everything from scratch.\n\nWe created the full visual identity and translated it across every channel: web, social media, newsletter and CRM. We designed the editorial system so content would be consistent and scalable — templates, tone guides, publishing flows. And we developed all digital communication assets, from social creatives to transactional emails.\n\nThe result is an ecosystem where every piece speaks the same visual language, regardless of channel.',
+        },
+      },
+    };
+
+    function buildMediaItem(item, mockup) {
+      let media;
+      if (item.type === 'video') {
+        media = `<video autoplay loop muted playsinline${item.poster ? ` poster="${item.poster}"` : ''}><source src="${item.src}" type="video/mp4"></video>`;
+      } else {
+        media = `<img src="${item.src}" alt="" loading="lazy">`;
+      }
+      if (mockup === 'laptop') {
+        return `<div class="mockup-wrap"><div class="laptop"><div class="laptop__lid"><div class="laptop__screen">${media}</div></div><div class="laptop__base"></div><div class="laptop__foot"></div></div></div>`;
+      }
+      return media;
+    }
+
+    function openModal(key) {
+      const p = PROJECTS[key];
+      if (!p) return;
+      const overlay = document.getElementById('modal-overlay');
+      const lang = currentLang;
+      const mediaEl = overlay.querySelector('.modal__media');
+
+      /* ── Build media gallery ── */
+      let stripHTML = '';
+      if (p.media.length > 1) {
+        stripHTML = '<div class="modal__media-strip">' +
+          p.media.map((item, i) => {
+            const inner = item.type === 'video'
+              ? `<video muted playsinline${item.poster ? ` poster="${item.poster}"` : ''}><source src="${item.src}" type="video/mp4"></video>`
+              : `<img src="${item.src}" alt="" loading="lazy">`;
+            return `<div class="modal__thumb${i === 0 ? ' active' : ''}" data-idx="${i}">${inner}</div>`;
+          }).join('') + '</div>';
+      }
+      mediaEl.innerHTML = `<div class="modal__media-main">${buildMediaItem(p.media[0], p.mockup)}</div>${stripHTML}`;
+
+      /* ── Thumbnail click to swap main ── */
+      mediaEl.querySelectorAll('.modal__thumb').forEach(thumb => {
+        thumb.addEventListener('click', () => {
+          const item = p.media[parseInt(thumb.dataset.idx)];
+          const main = mediaEl.querySelector('.modal__media-main');
+          const cur = main.querySelector('video');
+          if (cur) cur.pause();
+          main.innerHTML = buildMediaItem(item, p.mockup);
+          const nv = main.querySelector('video');
+          if (nv) nv.play().catch(() => {});
+          mediaEl.querySelectorAll('.modal__thumb').forEach(t => t.classList.remove('active'));
+          thumb.classList.add('active');
+        });
+      });
+
+      /* ── Text content ── */
+      overlay.querySelector('.modal__index').textContent = p.index + ' · ' + p.client;
+      overlay.querySelector('.modal__title').innerHTML = p.title[lang];
+      overlay.querySelector('.modal__subtitle').textContent = p.subtitle ? p.subtitle[lang] : '';
+      overlay.querySelector('.modal__type').textContent = p.type[lang];
+      overlay.querySelector('.modal__desc').innerHTML = p.desc[lang]
+        .split('\n\n').map(para => `<p>${para}</p>`).join('');
+
+      const linkEl = overlay.querySelector('.modal__link');
+      if (p.url) {
+        linkEl.href = p.url;
+        linkEl.target = '_blank';
+        linkEl.rel = 'noopener';
+        linkEl.textContent = lang === 'es' ? 'Ver proyecto ↗' : 'View project ↗';
+        linkEl.className = 'modal__link';
+        linkEl.style.display = '';
+      } else if (p.wip) {
+        linkEl.removeAttribute('href');
+        linkEl.textContent = lang === 'es' ? 'En fase de desarrollo' : 'In development';
+        linkEl.className = 'modal__link modal__link--wip';
+        linkEl.style.display = '';
+      } else {
+        linkEl.style.display = 'none';
+      }
+
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      const mainVid = mediaEl.querySelector('.modal__media-main video');
+      if (mainVid) mainVid.play().catch(() => {});
+    }
+
+    function closeModal() {
+      const overlay = document.getElementById('modal-overlay');
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+      const v = overlay.querySelector('video');
+      if (v) v.pause();
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    document.querySelectorAll('[data-project]').forEach(el => {
+      el.addEventListener('click', () => openModal(el.dataset.project));
+    });
+
+    /* ── Reveal on scroll ──────────────────────────────────────── */
+    const ro = new IntersectionObserver(es => {
+      es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target); }});
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.r').forEach(el => ro.observe(el));
+
+    /* ── Video play/pause on visibility ───────────────────────── */
+    const vo = new IntersectionObserver(es => {
+      es.forEach(e => {
+        const v = e.target.querySelector('video');
+        if (!v) return;
+        if (e.isIntersecting) v.play().catch(() => {}); else v.pause();
+      });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.pg-card, .featured').forEach(el => vo.observe(el));
+
+    /* Init language */
+    setLang(currentLang);
+  </script>
+
+  <script>
+    window.__TWEAK_DEFAULTS = { theme: 'dark', accent: '#6366f1', displayName: 'Inés de la Vega' };
+  </script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const { useState, useRef, useEffect } = React;
+    function useTweaks(d) {
+      const [s, set] = useState(() => { try { const r=sessionStorage.getItem('_t'); return r?{...d,...JSON.parse(r)}:{...d}; } catch { return{...d}; }});
+      return [s, (k,v) => set(p => { const n={...p,[k]:v}; try{sessionStorage.setItem('_t',JSON.stringify(n));}catch{} return n; })];
+    }
+    function TweaksPanel({ title, children }) {
+      const [o, setO] = useState(false);
+      return (<>
+        <button className="tweaks-toggle" onClick={() => setO(x=>!x)} title="Tweaks">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+            <circle cx="4" cy="4" r="1.5" fill="currentColor"/>
+            <circle cx="4" cy="12" r="1.5" fill="currentColor"/>
+            <circle cx="12" cy="8" r="1.5" fill="currentColor"/>
+            <line x1="5.5" y1="4" x2="14" y2="4" stroke="currentColor" strokeWidth="1.5"/>
+            <line x1="0" y1="4" x2="2.5" y2="4" stroke="currentColor" strokeWidth="1.5"/>
+            <line x1="5.5" y1="12" x2="14" y2="12" stroke="currentColor" strokeWidth="1.5"/>
+            <line x1="0" y1="12" x2="2.5" y2="12" stroke="currentColor" strokeWidth="1.5"/>
+            <line x1="13.5" y1="8" x2="14" y2="8" stroke="currentColor" strokeWidth="1.5"/>
+            <line x1="0" y1="8" x2="10.5" y2="8" stroke="currentColor" strokeWidth="1.5"/>
+          </svg>
+        </button>
+        {o && <aside className="tweaks-panel">
+          <div className="tweaks-panel__header"><span>{title}</span><button className="tweaks-close" onClick={()=>setO(false)}>✕</button></div>
+          {children}
+        </aside>}
+      </>);
+    }
+    const TS = ({title,children}) => <div className="tweak-section"><div className="tweak-section__title">{title}</div>{children}</div>;
+    function TR({label,value,options,onChange}) {
+      return <div className="tweak-field">{label&&<div className="tweak-label">{label}</div>}<div className="tweak-radio-group">{options.map(o=><label key={o.value} className={`tweak-radio${value===o.value?' active':''}`}><input type="radio" name={label} value={o.value} checked={value===o.value} onChange={()=>onChange(o.value)}/>{o.label}</label>)}</div></div>;
+    }
+    function TC({label,value,options,onChange}) {
+      const r=useRef();
+      return <div className="tweak-field">{label&&<div className="tweak-label">{label}</div>}<div className="tweak-swatches">{options.map(h=><button key={h} className={`tweak-swatch${value===h?' active':''}`} style={{background:h}} onClick={()=>onChange(h)} title={h}/>)}<label className="tweak-swatch tweak-swatch-pick" style={{background:value}}><input ref={r} type="color" value={value} onChange={e=>onChange(e.target.value)}/></label></div></div>;
+    }
+    function TT({label,value,onChange}) { return <div className="tweak-field">{label&&<div className="tweak-label">{label}</div>}<input className="tweak-input" type="text" value={value} onChange={e=>onChange(e.target.value)}/></div>; }
+    function TB({label,onClick}) { return <div className="tweak-field"><button className="tweak-btn" onClick={onClick}>{label}</button></div>; }
+
+    const D = window.__TWEAK_DEFAULTS;
+    function luma(hex){const h=hex.replace('#','');const r=parseInt(h.substr(0,2),16),g=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16);return(0.299*r+0.587*g+0.114*b)/255;}
+    function apply(t) {
+      document.documentElement.dataset.theme = t.theme;
+      document.documentElement.style.setProperty('--accent', t.accent);
+      document.documentElement.style.setProperty('--accent-ink', luma(t.accent)>0.6?'#111':'#fff');
+      document.querySelectorAll('[data-cover-name]').forEach(el=>{ el.textContent=t.displayName; });
+    }
+    function App() {
+      const [t, set] = useTweaks(D);
+      useEffect(()=>apply(t),[t]);
+      return <TweaksPanel title="Tweaks">
+        <TS title="Tema"><TR label="Estética" value={t.theme} options={[{value:'dark',label:'Dark'},{value:'swiss',label:'Light'},{value:'warm',label:'Warm'}]} onChange={v=>set('theme',v)}/></TS>
+        <TS title="Acento"><TC label="Color" value={t.accent} options={['#6366f1','#0ea5e9','#10b981','#f97316','#e11d48','#a855f7']} onChange={v=>set('accent',v)}/></TS>
+        <TS title="Nombre"><TT label="Nombre" value={t.displayName} onChange={v=>set('displayName',v)}/></TS>
+        <TS title="Exportar"><TB label="Imprimir / PDF" onClick={()=>window.print()}/></TS>
+      </TweaksPanel>;
+    }
+    ReactDOM.createRoot(document.getElementById('tweaks-root')).render(<App/>);
+    apply(D);
+  </script>
+</body>
+</html>
