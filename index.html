@@ -1096,13 +1096,13 @@
       .nav { padding: 18px 24px; }
       .nav__right { gap: 16px; }
       .hero { padding: 90px 24px 44px; }
-      .featured__body { padding: 28px 24px 36px; }
       .pg-header { padding: 44px 24px 32px; }
       .pg-grid { grid-template-columns: 1fr; }
       .pg-card--a, .pg-card--b, .pg-card--c, .pg-card--d, .pg-card--e { grid-column: 1 / -1; border-right: none; }
       .pg-card--c { flex-direction: column; min-height: auto; }
       .pg-card--c .pg-card__editorial { border-right: none; border-bottom: 1px solid var(--border); }
-      .pg-card--c .pg-card__media { aspect-ratio: 16 / 9; }
+      .pg-card--c .pg-card__media { aspect-ratio: 16 / 9; order: -1; }
+      .pg-card--c .pg-card__editorial { order: 1; border-top: 1px solid var(--border); border-bottom: none; }
       .pg-card--mc .pg-card__media { aspect-ratio: unset !important; min-height: 300px; overflow: visible; }
       .pg-card__media { aspect-ratio: 16 / 9 !important; }
       .about { grid-template-columns: 1fr; }
@@ -1112,6 +1112,45 @@
       .contact__left { border-right: none; border-bottom: 1px solid var(--border); padding: 52px 24px; }
       .contact__right { padding: 48px 24px; }
       .footer { padding: 20px 24px; }
+
+      /* ── Esfera featured: stacked layout on mobile ── */
+      .featured {
+        height: auto;
+        display: flex;
+        flex-direction: column;
+      }
+      .featured__media {
+        position: relative;
+        aspect-ratio: 16 / 9;
+        flex-shrink: 0;
+      }
+      .featured__gradient { display: none; }
+      .featured__body {
+        position: relative;
+        background: var(--surface);
+        padding: 28px 24px 36px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 10px;
+        border-bottom: 1px solid var(--border);
+      }
+      .featured__header {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 4px;
+      }
+      .featured__footer { gap: 6px; }
+      .featured__title { font-size: clamp(36px, 9vw, 56px); }
+      .featured__cta {
+        color: var(--text);
+        border-color: var(--border);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+      }
+      .featured__cta:hover { background: var(--surface-2); color: var(--text); }
     }
 
     @media print {
