@@ -1886,7 +1886,7 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
     document.querySelectorAll('[data-project]').forEach(el => {
-      const cta = el.querySelector('.pg-card__cta, .pg-card__editorial .pg-card__cta');
+      const cta = el.querySelector('.pg-card__cta, .featured__cta');
       if (cta) {
         cta.addEventListener('click', e => { e.stopPropagation(); openModal(el.dataset.project); });
       } else {
