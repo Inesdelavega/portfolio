@@ -884,7 +884,7 @@
     /* ════════════════════════════════════════════════════════════
        PROJECT MODAL
     ════════════════════════════════════════════════════════════ */
-    .pg-card, .featured { cursor: pointer; }
+    .pg-card__cta { cursor: pointer; }
 
     .pg-card__cta {
       display: inline-block;
@@ -1001,7 +1001,7 @@
     }
     .modal__close {
       position: absolute;
-      top: 14px; right: 14px;
+      top: max(14px, env(safe-area-inset-top, 14px)); right: 14px;
       z-index: 20;
       background: rgba(255,255,255,0.92);
       backdrop-filter: blur(6px);
@@ -1434,7 +1434,6 @@
     </div>
   </div>
 
-  <div id="tweaks-root"></div>
 
   <!-- ════════════════════════════════════════════════════════════
        I18N + SCRIPTS
@@ -1848,7 +1847,12 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
     document.querySelectorAll('[data-project]').forEach(el => {
-      el.addEventListener('click', () => openModal(el.dataset.project));
+      const cta = el.querySelector('.pg-card__cta, .pg-card__editorial .pg-card__cta');
+      if (cta) {
+        cta.addEventListener('click', e => { e.stopPropagation(); openModal(el.dataset.project); });
+      } else {
+        el.addEventListener('click', () => openModal(el.dataset.project));
+      }
     });
 
     /* ── Reveal on scroll ──────────────────────────────────────── */
@@ -1860,11 +1864,11 @@
     /* ── Video play/pause on visibility ───────────────────────── */
     const vo = new IntersectionObserver(es => {
       es.forEach(e => {
-        const v = e.target.querySelector('video');
-        if (!v) return;
-        if (e.isIntersecting) v.play().catch(() => {}); else v.pause();
+        e.target.querySelectorAll('video').forEach(v => {
+          if (e.isIntersecting) { v.muted = true; v.play().catch(() => {}); } else v.pause();
+        });
       });
-    }, { threshold: 0.2 });
+    }, { threshold: 0.1, rootMargin: '0px 0px -10% 0px' });
     document.querySelectorAll('.pg-card, .featured').forEach(el => vo.observe(el));
 
     /* Init language */
@@ -1872,70 +1876,9 @@
   </script>
 
   <script>
-    window.__TWEAK_DEFAULTS = { theme: 'dark', accent: '#6366f1', displayName: 'Inés de la Vega' };
-  </script>
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script type="text/babel">
-    const { useState, useRef, useEffect } = React;
-    function useTweaks(d) {
-      const [s, set] = useState(() => { try { const r=sessionStorage.getItem('_t'); return r?{...d,...JSON.parse(r)}:{...d}; } catch { return{...d}; }});
-      return [s, (k,v) => set(p => { const n={...p,[k]:v}; try{sessionStorage.setItem('_t',JSON.stringify(n));}catch{} return n; })];
-    }
-    function TweaksPanel({ title, children }) {
-      const [o, setO] = useState(false);
-      return (<>
-        <button className="tweaks-toggle" onClick={() => setO(x=>!x)} title="Tweaks">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-            <circle cx="4" cy="4" r="1.5" fill="currentColor"/>
-            <circle cx="4" cy="12" r="1.5" fill="currentColor"/>
-            <circle cx="12" cy="8" r="1.5" fill="currentColor"/>
-            <line x1="5.5" y1="4" x2="14" y2="4" stroke="currentColor" strokeWidth="1.5"/>
-            <line x1="0" y1="4" x2="2.5" y2="4" stroke="currentColor" strokeWidth="1.5"/>
-            <line x1="5.5" y1="12" x2="14" y2="12" stroke="currentColor" strokeWidth="1.5"/>
-            <line x1="0" y1="12" x2="2.5" y2="12" stroke="currentColor" strokeWidth="1.5"/>
-            <line x1="13.5" y1="8" x2="14" y2="8" stroke="currentColor" strokeWidth="1.5"/>
-            <line x1="0" y1="8" x2="10.5" y2="8" stroke="currentColor" strokeWidth="1.5"/>
-          </svg>
-        </button>
-        {o && <aside className="tweaks-panel">
-          <div className="tweaks-panel__header"><span>{title}</span><button className="tweaks-close" onClick={()=>setO(false)}>✕</button></div>
-          {children}
-        </aside>}
-      </>);
-    }
-    const TS = ({title,children}) => <div className="tweak-section"><div className="tweak-section__title">{title}</div>{children}</div>;
-    function TR({label,value,options,onChange}) {
-      return <div className="tweak-field">{label&&<div className="tweak-label">{label}</div>}<div className="tweak-radio-group">{options.map(o=><label key={o.value} className={`tweak-radio${value===o.value?' active':''}`}><input type="radio" name={label} value={o.value} checked={value===o.value} onChange={()=>onChange(o.value)}/>{o.label}</label>)}</div></div>;
-    }
-    function TC({label,value,options,onChange}) {
-      const r=useRef();
-      return <div className="tweak-field">{label&&<div className="tweak-label">{label}</div>}<div className="tweak-swatches">{options.map(h=><button key={h} className={`tweak-swatch${value===h?' active':''}`} style={{background:h}} onClick={()=>onChange(h)} title={h}/>)}<label className="tweak-swatch tweak-swatch-pick" style={{background:value}}><input ref={r} type="color" value={value} onChange={e=>onChange(e.target.value)}/></label></div></div>;
-    }
-    function TT({label,value,onChange}) { return <div className="tweak-field">{label&&<div className="tweak-label">{label}</div>}<input className="tweak-input" type="text" value={value} onChange={e=>onChange(e.target.value)}/></div>; }
-    function TB({label,onClick}) { return <div className="tweak-field"><button className="tweak-btn" onClick={onClick}>{label}</button></div>; }
-
-    const D = window.__TWEAK_DEFAULTS;
-    function luma(hex){const h=hex.replace('#','');const r=parseInt(h.substr(0,2),16),g=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16);return(0.299*r+0.587*g+0.114*b)/255;}
-    function apply(t) {
-      document.documentElement.dataset.theme = t.theme;
-      document.documentElement.style.setProperty('--accent', t.accent);
-      document.documentElement.style.setProperty('--accent-ink', luma(t.accent)>0.6?'#111':'#fff');
-      document.querySelectorAll('[data-cover-name]').forEach(el=>{ el.textContent=t.displayName; });
-    }
-    function App() {
-      const [t, set] = useTweaks(D);
-      useEffect(()=>apply(t),[t]);
-      return <TweaksPanel title="Tweaks">
-        <TS title="Tema"><TR label="Estética" value={t.theme} options={[{value:'dark',label:'Dark'},{value:'swiss',label:'Light'},{value:'warm',label:'Warm'}]} onChange={v=>set('theme',v)}/></TS>
-        <TS title="Acento"><TC label="Color" value={t.accent} options={['#6366f1','#0ea5e9','#10b981','#f97316','#e11d48','#a855f7']} onChange={v=>set('accent',v)}/></TS>
-        <TS title="Nombre"><TT label="Nombre" value={t.displayName} onChange={v=>set('displayName',v)}/></TS>
-        <TS title="Exportar"><TB label="Imprimir / PDF" onClick={()=>window.print()}/></TS>
-      </TweaksPanel>;
-    }
-    ReactDOM.createRoot(document.getElementById('tweaks-root')).render(<App/>);
-    apply(D);
+    document.documentElement.dataset.theme = 'dark';
+    document.documentElement.style.setProperty('--accent', '#e11d48');
+    document.documentElement.style.setProperty('--accent-ink', '#ffffff');
   </script>
 </body>
 </html>
