@@ -96,6 +96,40 @@
       font-weight: 500;
       letter-spacing: -0.01em;
     }
+    .logo-c {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      line-height: 1;
+    }
+    .logo-c__top {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+    }
+    .logo-c__ines {
+      font-family: var(--font-sans);
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: -0.04em;
+      color: var(--text);
+    }
+    .logo-c__dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #e11d48;
+      flex-shrink: 0;
+      margin-bottom: 4px;
+    }
+    .logo-c__sub {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 300;
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.01em;
+      padding-left: 2px;
+    }
     .nav__right {
       display: flex;
       align-items: center;
@@ -1190,7 +1224,13 @@
 
   <!-- ── NAV ──────────────────────────────────────────────────── -->
   <nav class="nav">
-    <span class="nav__name" data-cover-name>Inés de la Vega</span>
+    <div class="logo-c">
+      <div class="logo-c__top">
+        <span class="logo-c__ines">Inés</span>
+        <span class="logo-c__dot"></span>
+      </div>
+      <span class="logo-c__sub">de la Vega</span>
+    </div>
     <div class="nav__right">
       <div class="lang-toggle">
         <button class="lang-btn active" data-lang="es" onclick="setLang('es')">ES</button>
@@ -1481,7 +1521,13 @@
   </section>
 
   <footer class="footer">
-    <span data-cover-name>Inés de la Vega</span>
+    <div class="logo-c">
+      <div class="logo-c__top">
+        <span class="logo-c__ines">Inés</span>
+        <span class="logo-c__dot"></span>
+      </div>
+      <span class="logo-c__sub">de la Vega</span>
+    </div>
     <span>2025</span>
   </footer>
 
