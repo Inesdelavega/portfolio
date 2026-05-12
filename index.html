@@ -419,6 +419,7 @@
     [data-theme="warm"] .pg-card--mc .pg-card__media { background: #e2dbd0; }
     .pg-card--mc .pg-card__media .mockup-wrap video { height: auto; object-fit: unset; }
     .pg-card--mc:hover .pg-card__media video { transform: none !important; }
+    .pg-card--flip .pg-card__editorial { border-right: none; border-left: 1px solid var(--border); }
 
     /* ── Laptop mockup ──────────────────────────────────────────── */
     .mockup-wrap {
@@ -1167,6 +1168,8 @@
       .pg-card--c .pg-card__media { aspect-ratio: 16 / 9; order: -1; }
       .pg-card--c .pg-card__editorial { order: 1; border-top: 1px solid var(--border); border-bottom: none; }
       .pg-card--mc .pg-card__media { aspect-ratio: unset !important; min-height: 300px; overflow: visible; }
+      .pg-card--flip .pg-card__media { order: -1; }
+      .pg-card--flip .pg-card__editorial { border-left: none; border-top: 1px solid var(--border); }
       .pg-card__media { aspect-ratio: 16 / 9 !important; }
       .about { grid-template-columns: 1fr; }
       .about__left { border-right: none; border-bottom: 1px solid var(--border); padding: 52px 24px; }
@@ -1414,22 +1417,14 @@
     </article>
 
     <!-- 08 · Ladera Mágica -->
-    <article class="pg-card pg-card--c pg-card--mc" data-project="ladera">
-      <div class="pg-card__editorial">
-        <span class="pg-card__editorial-num" data-i18n="lm.num">08 / 08 · Web · Desarrollo · Marca · 2025</span>
-        <div>
-          <h3 class="pg-card__editorial-title">Ladera<br><em>Mágica</em></h3>
-          <p class="pg-card__editorial-desc" data-i18n="lm.desc" style="margin-top:16px">Proyecto propio de turismo rural en Asturias. Identidad, web y sistema de reservas directo — todo diseñado y desarrollado por mí desde cero.</p>
-          <span class="pg-card__cta" data-i18n="card.cta" style="margin-top:14px">Saber más →</span>
-        </div>
-        <span class="pg-card__editorial-meta">Ladera Mágica · Asturias · 2025</span>
-      </div>
+    <article class="pg-card pg-card--c pg-card--mc pg-card--flip" data-project="ladera">
       <div class="pg-card__media">
         <div class="mockup-wrap">
           <div class="laptop">
             <div class="laptop__lid">
               <div class="laptop__screen">
                 <video autoplay loop muted playsinline>
+                  <source src="Proyectos/Ladera%20magica/Grabaci%C3%B3n%20de%20pantalla%202026-05-12%20a%20las%2016.01.52.mov" type="video/quicktime">
                   <source src="Proyectos/Ladera%20magica/Grabaci%C3%B3n%20de%20pantalla%202026-05-12%20a%20las%2016.01.52.mov" type="video/mp4">
                 </video>
               </div>
@@ -1438,6 +1433,15 @@
             <div class="laptop__foot"></div>
           </div>
         </div>
+      </div>
+      <div class="pg-card__editorial">
+        <span class="pg-card__editorial-num" data-i18n="lm.num">08 / 08 · Web · Desarrollo · Marca · 2025</span>
+        <div>
+          <h3 class="pg-card__editorial-title">Ladera<br><em>Mágica</em></h3>
+          <p class="pg-card__editorial-desc" data-i18n="lm.desc" style="margin-top:16px">Proyecto propio de turismo rural en Asturias. Identidad, web y sistema de reservas directo — todo diseñado y desarrollado por mí desde cero.</p>
+          <span class="pg-card__cta" data-i18n="card.cta" style="margin-top:14px">Saber más →</span>
+        </div>
+        <span class="pg-card__editorial-meta">Ladera Mágica · Asturias · 2025</span>
       </div>
     </article>
 
@@ -1909,7 +1913,7 @@
         index: '08 / 08', client: 'Ladera Mágica · 2025',
         mockup: 'laptop',
         media: [
-          { type: 'video', src: 'Proyectos/Ladera%20magica/Grabaci%C3%B3n%20de%20pantalla%202026-05-12%20a%20las%2016.01.52.mov' },
+          { type: 'video', src: 'Proyectos/Ladera%20magica/Grabaci%C3%B3n%20de%20pantalla%202026-05-12%20a%20las%2016.01.52.mov', mime: 'video/quicktime' },
         ],
         url: 'https://laderamagica.com/',
         title:    { es: 'Ladera<br><em>Mágica</em>',        en: 'Ladera<br><em>Mágica</em>' },
@@ -1925,7 +1929,8 @@
     function buildMediaItem(item, mockup) {
       let media;
       if (item.type === 'video') {
-        media = `<video autoplay loop muted playsinline${item.poster ? ` poster="${item.poster}"` : ''}><source src="${item.src}" type="video/mp4"></video>`;
+        const mime = item.mime || 'video/mp4';
+        media = `<video autoplay loop muted playsinline${item.poster ? ` poster="${item.poster}"` : ''}><source src="${item.src}" type="${mime}"><source src="${item.src}" type="video/mp4"></video>`;
       } else {
         media = `<img src="${item.src}" alt="" loading="lazy">`;
       }
