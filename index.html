@@ -956,6 +956,7 @@
       flex-direction: column;
       background: var(--bg);
       overflow: hidden;
+      position: relative;
     }
     .modal__media-main {
       flex: 1;
@@ -1064,21 +1065,23 @@
     .modal__desc p:last-child { margin-bottom: 0; }
     .modal__nav {
       position: absolute;
-      top: 50%; transform: translateY(-50%);
-      z-index: 10;
-      background: rgba(0,0,0,0.35);
+      top: 50%;
+      transform: translateY(calc(-50% - 37px)); /* offset up by half the strip height */
+      z-index: 20;
+      background: rgba(0,0,0,0.4);
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
-      border: 1px solid rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.18);
       border-radius: 50%;
       width: 34px; height: 34px;
       display: flex; align-items: center; justify-content: center;
       color: #fff; cursor: pointer;
-      transition: background 0.15s, opacity 0.15s;
+      transition: background 0.15s, opacity 0.2s;
+      pointer-events: all;
     }
-    .modal__nav:hover { background: rgba(0,0,0,0.55); }
-    .modal__nav--prev { left: 10px; }
-    .modal__nav--next { right: 10px; }
+    .modal__nav:hover { background: rgba(0,0,0,0.65); }
+    .modal__nav--prev { left: 12px; }
+    .modal__nav--next { right: 12px; }
     .modal__media-strip {
       overflow-x: auto;
       scroll-snap-type: x mandatory;
@@ -1854,8 +1857,12 @@
           }).join('') + '</div>'
         : '';
 
-      const navHTML = hasMultiple ? navArrow('prev') + navArrow('next') : '';
-      mediaEl.innerHTML = `<div class="modal__media-main">${buildMediaItem(p.media[0], p.mockup)}${navHTML}</div>${stripHTML}`;
+      mediaEl.innerHTML = `<div class="modal__media-main">${buildMediaItem(p.media[0], p.mockup)}</div>${stripHTML}`;
+
+      /* ── Nav arrows as siblings of main (outside video layer) ── */
+      if (hasMultiple) {
+        mediaEl.insertAdjacentHTML('beforeend', navArrow('prev') + navArrow('next'));
+      }
 
       /* ── Shared goTo function ── */
       function goTo(idx) {
@@ -1863,7 +1870,7 @@
         const main = mediaEl.querySelector('.modal__media-main');
         const cur = main.querySelector('video');
         if (cur) cur.pause();
-        main.innerHTML = buildMediaItem(p.media[idx], p.mockup) + (hasMultiple ? navArrow('prev') + navArrow('next') : '');
+        main.innerHTML = buildMediaItem(p.media[idx], p.mockup);
         const nv = main.querySelector('video');
         if (nv) nv.play().catch(() => {});
         mediaEl.querySelectorAll('.modal__thumb').forEach((t, i) => t.classList.toggle('active', i === idx));
