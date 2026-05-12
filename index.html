@@ -1396,9 +1396,9 @@
     </div>
     <div class="contact__right">
       <div class="contact__links">
-        <a href="mailto:inesdelavegalopez@gmail.com" class="contact__link r">
+        <a class="contact__link r" data-em="inesdelavegalopez" data-dm="gmail.com">
           <span class="contact__link-label">Email</span>
-          <span class="contact__link-value">inesdelavegalopez@gmail.com</span>
+          <span class="contact__link-value" data-em-display></span>
           <span class="contact__link-arrow">↗</span>
         </a>
         <a href="#" class="contact__link r r1">
@@ -1870,6 +1870,14 @@
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -10% 0px' });
     document.querySelectorAll('.pg-card, .featured').forEach(el => vo.observe(el));
+
+    /* Email obfuscation — assembled at runtime, invisible to scrapers */
+    document.querySelectorAll('[data-em][data-dm]').forEach(el => {
+      const email = el.dataset.em + '@' + el.dataset.dm;
+      el.href = 'mailto:' + email;
+      const display = el.querySelector('[data-em-display]');
+      if (display) display.textContent = email;
+    });
 
     /* Init language */
     setLang(currentLang);
